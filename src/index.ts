@@ -3,7 +3,7 @@ import { getDeviceType } from './utils'
 initEnv();
 
 type configType = {
-  scheme: string;
+  schema: string;
   iosURL?: string;
   iosStoreURL?: string;
   androidURL?: string;
@@ -16,7 +16,7 @@ const isAndroid = /android|adr|linux/gi.test(ua);
 const isIOS = /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua);
 
 // 中间承载页面
-const middlePage = 'https://www.bilibili.com/blackboard/activity-GD74tr1a4K.html?id=1955295#/guide?tabid=750124&modelid=1955295'
+const middlePage = 'https://www.bilibili.com/blackboard/activity-XLNUvLvI6b.html'
 // 唤醒必剪的默认scheme
 const DEFAULT_SCHEME = "bcut://";
 // IOS AppStore地址
@@ -123,15 +123,15 @@ const goAppStore = (iosStoreURL: string) => {
 }
 
 // 端外掉起客户端
-const outOpenBcut = (opt: {scheme: string, androidURL: string, iosStoreURL: string, middlePageURl: string}) => {
+const outOpenBcut = (opt: {schema: string, androidURL: string, iosStoreURL: string, middlePageURl: string}) => {
   // 判断当前环境，如果是微信，微博，qq，百度的时候，走引导页面唤起和下载
   const browser = getDeviceType()
   if (browser.MicroMessenger || browser.mqq || browser.weibo) {
-    location.href = opt.middlePageURl
+    location.href = opt.middlePageURl + '?schema=' + opt.schema
     return false
   }
   // 端外尝试唤醒必剪
-  location.href = opt.scheme
+  location.href = opt.schema
   bcut_timeout = setTimeout(() => {
     // 唤醒超时跳转至下载页
     if (isAndroid) {
@@ -150,6 +150,15 @@ const visibilitychange = () => {
   }
 }
 
+export const immediateDownload = (androidURL?: string, iosStoreURL?: string) => {
+  if (isAndroid) {
+    location.href = androidURL || ANDROID_DOWNLOAD_URL
+  }
+  if (isIOS) {
+    location.href = iosStoreURL || IOS_APPSTORE_URL
+  }
+}
+
 export const addEventListener = () => {
   // 兼容多的浏览器事件
   document.addEventListener('visibilitychange', visibilitychange, false);
@@ -165,27 +174,27 @@ export const removeEventListener = () => {
 }
 
 export const openBcut = (config: string | configType) => {
-  let scheme = DEFAULT_SCHEME
+  let schema = DEFAULT_SCHEME
   let iosStoreURL = IOS_APPSTORE_URL
   let androidURL = ANDROID_DOWNLOAD_URL
   let packageName = PACKAGE_NAME
   let middlePageURl = middlePage
   if (typeof config === 'string') {
-    scheme = config || scheme
+    schema = config || schema
   } else if (config) {
-    scheme = config.scheme || scheme
+    schema = config.schema || schema
     iosStoreURL = config.iosStoreURL || iosStoreURL
     androidURL = config.androidURL || androidURL
     packageName = config.packageName || packageName
     middlePageURl = config.middlePageURl || middlePage
   }
   if (!inBiliApp) {
-    outOpenBcut({scheme, androidURL, iosStoreURL, middlePageURl})
+    outOpenBcut({schema, androidURL, iosStoreURL, middlePageURl})
     return Promise.resolve()
   } else {
-    return isInstalled(packageName, scheme).then(installed => {
+    return isInstalled(packageName, schema).then(installed => {
       if (installed) {
-        return openApp(scheme)
+        return openApp(schema)
       } else {
         return goAppStore(iosStoreURL)
       }
