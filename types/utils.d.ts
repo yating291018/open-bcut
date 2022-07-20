@@ -1,0 +1,25 @@
+export declare const getDeviceType: () => {
+    baiduspider: boolean;
+    QQLive: boolean;
+    mqq: boolean;
+    weibo: boolean;
+    MicroMessenger: boolean;
+    mbaidu: boolean;
+    iqiyi: boolean;
+    qq: boolean;
+    mobile: boolean;
+    uc: boolean;
+    xiaomiqjs: boolean;
+    dianping: boolean;
+    ios: boolean;
+    android: boolean;
+    windowsphone: boolean;
+    iPhone: boolean;
+    iPad: boolean;
+    webApp: boolean;
+    baidu: boolean;
+    Youku: boolean;
+    chrome: boolean;
+    CMDC: boolean;
+    BiliApp: boolean;
+};
