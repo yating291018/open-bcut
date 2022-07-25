@@ -1,6 +1,6 @@
 {
   "name": "@mingchu/open-bcut2",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "唤醒必剪App",
   "main": "dist/openBcut.umd.js",
   "module": "dist/openBcut.es.js",
