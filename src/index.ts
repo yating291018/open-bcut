@@ -207,7 +207,7 @@ export const openBcut = (config: string | configType) => {
     return Promise.resolve()
   } else {
     if (schemaType === 'bcutSchemaH5') {
-      schema = 'bilibili://uper/appTraffic'
+      schema = 'bcut://studio/main?index=0'
     }
     return isInstalled(packageName, schema).then(installed => {
       if (installed) {
