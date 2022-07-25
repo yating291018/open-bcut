@@ -88,6 +88,7 @@ const openApp = (scheme: string, pageurl: string, schemaType: string) => {
     return Promise.reject()
   }
   if (schemaType === 'bcutSchemaH5') {
+    console.log('--进入了调用H5的页面')
     if (isIOS) {
       location.href = "bilibili://uper/appTraffic?appName=com.bilibili.studio&appScheme=bcut://studio/web/?h5_url=" + encodeURIComponent(pageurl)
     } else {
