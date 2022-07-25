@@ -3,7 +3,8 @@ import { getDeviceType } from './utils'
 initEnv();
 
 type configType = {
-  schema: string;
+  schema?: string;
+  pageurl?: string;
   iosURL?: string;
   iosStoreURL?: string;
   androidURL?: string;
@@ -82,15 +83,15 @@ const isInstalled = (packageName: string, url: string) => {
   }
 }
 
-const openApp = (scheme: string, schemaType: string = 'bcutSchema') => {
+const openApp = (scheme: string, pageurl: string, schemaType: string) => {
   if (!inBiliApp) {
     return Promise.reject()
   }
   if (schemaType === 'bcutSchemaH5') {
     if (isIOS) {
-      location.href = "bilibili://uper/appTraffic?appName=com.bilibili.studio&appScheme=" + encodeURIComponent('bcut://studio/web/?h5_url=' + encodeURIComponent(scheme))
+      location.href = "bilibili://uper/appTraffic?appName=com.bilibili.studio&appScheme=bcut://studio/web/?h5_url=" + encodeURIComponent(pageurl)
     } else {
-      location.href = "bcut://studio/web/?h5_url=" + encodeURIComponent(scheme)
+      location.href = "bcut://studio/web/?h5_url=" + encodeURIComponent(pageurl)
     }
     return Promise.resolve()
   }
@@ -189,6 +190,7 @@ export const openBcut = (config: string | configType) => {
   let packageName = PACKAGE_NAME
   let middlePageURl = middlePage
   let schemaType = 'bcutSchema'
+  let pageurl = ''
   if (typeof config === 'string') {
     schema = config || schema
   } else if (config) {
@@ -198,14 +200,18 @@ export const openBcut = (config: string | configType) => {
     packageName = config.packageName || packageName
     middlePageURl = config.middlePageURl || middlePage
     schemaType = config.schemaType || 'bcutSchema'
+    pageurl = config.pageurl || ''
   }
   if (!inBiliApp) {
     outOpenBcut({schema, androidURL, iosStoreURL, middlePageURl})
     return Promise.resolve()
   } else {
+    if (schemaType === 'bcutSchemaH5') {
+      schema = 'bilibili://uper/appTraffic'
+    }
     return isInstalled(packageName, schema).then(installed => {
       if (installed) {
-        return openApp(schema, schemaType)
+        return openApp(schema, pageurl, schemaType)
       } else {
         return goAppStore(iosStoreURL)
       }
