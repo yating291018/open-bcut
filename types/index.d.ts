@@ -1,11 +1,12 @@
 declare type configType = {
-    schema: string;
+    schema?: string;
+    pageurl?: string;
     iosURL?: string;
     iosStoreURL?: string;
     androidURL?: string;
     packageName?: string;
     middlePageURl?: string;
-    schemaType?: 'bcut-schema' | 'bcut-schema-h5';
+    schemaType?: 'bcutSchema' | 'bcutSchemaH5';
 };
 export declare const immediateDownload: (androidURL?: string, iosStoreURL?: string) => void;
 export declare const addEventListener: () => void;
