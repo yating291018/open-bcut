@@ -9,7 +9,7 @@ type configType = {
   androidURL?: string;
   packageName?: string;
   middlePageURl?: string;
-  schemaType?: 'bcut-schema' | 'bcut-schema-h5';
+  schemaType?: 'bcutSchema' | 'bcutSchemaH5';
 }
 
 const ua = typeof window === "undefined" ? "" : window.navigator.userAgent;
@@ -82,11 +82,11 @@ const isInstalled = (packageName: string, url: string) => {
   }
 }
 
-const openApp = (scheme: string, schemaType: string = 'bcut-schema') => {
+const openApp = (scheme: string, schemaType: string = 'bcutSchema') => {
   if (!inBiliApp) {
     return Promise.reject()
   }
-  if (schemaType === 'bcut-schema-page') {
+  if (schemaType === 'bcutSchemaH5') {
     if (isIOS) {
       location.href = "bilibili://uper/appTraffic?appName=com.bilibili.studio&appScheme=" + encodeURIComponent('bcut://studio/web/?h5_url=' + encodeURIComponent(scheme))
     } else {
@@ -188,7 +188,7 @@ export const openBcut = (config: string | configType) => {
   let androidURL = ANDROID_DOWNLOAD_URL
   let packageName = PACKAGE_NAME
   let middlePageURl = middlePage
-  let schemaType = 'bcut-schema'
+  let schemaType = 'bcutSchema'
   if (typeof config === 'string') {
     schema = config || schema
   } else if (config) {
@@ -197,7 +197,7 @@ export const openBcut = (config: string | configType) => {
     androidURL = config.androidURL || androidURL
     packageName = config.packageName || packageName
     middlePageURl = config.middlePageURl || middlePage
-    schemaType = config.schemaType || 'bcut-schema'
+    schemaType = config.schemaType || 'bcutSchema'
   }
   if (!inBiliApp) {
     outOpenBcut({schema, androidURL, iosStoreURL, middlePageURl})
